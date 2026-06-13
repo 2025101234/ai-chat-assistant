@@ -1,0 +1,91 @@
+{
+  "name": "ai-chat-assistant",
+  "version": "1.0.0",
+  "description": "AI聊天助手 - 智能接管微信/QQ聊天",
+  "main": "dist-electron/main.js",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build && electron-builder",
+    "preview": "vite preview",
+    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "typecheck": "tsc --noEmit",
+    "test:unit": "vitest run",
+    "test:integration": "vitest run --config vitest.integration.config.ts",
+    "test:e2e": "playwright test",
+    "electron:dev": "vite && electron .",
+    "electron:build": "vite build && electron-builder",
+    "db:migrate": "tsx electron/services/database/migrate.ts"
+  },
+  "dependencies": {
+    "@ant-design/icons": "^5.6.1",
+    "ai": "^4.3.16",
+    "antd": "^5.24.7",
+    "axios": "^1.9.0",
+    "date-fns": "^4.1.0",
+    "drizzle-orm": "^0.44.2",
+    "electron-log": "^5.3.3",
+    "electron-store": "^10.0.1",
+    "i18next": "^25.1.3",
+    "node-cache": "^5.1.2",
+    "ollama": "^0.5.14",
+    "openai": "^4.87.4",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "react-router-dom": "^7.5.3",
+    "sql.js": "^1.11.0",
+    "uuid": "^11.1.0",
+    "wechatferry": "^0.0.26",
+    "zustand": "^5.0.5"
+  },
+  "devDependencies": {
+    "@electron-toolkit/preload": "^3.0.1",
+    "@electron-toolkit/utils": "^4.0.0",
+    "@playwright/test": "^1.52.0",
+    "@tailwindcss/postcss": "^4.3.0",
+    "@types/node": "^22.15.2",
+    "@types/react": "^19.1.2",
+    "@types/react-dom": "^19.1.2",
+    "@types/uuid": "^10.0.0",
+    "@typescript-eslint/eslint-plugin": "^8.32.0",
+    "@typescript-eslint/parser": "^8.32.0",
+    "@vitejs/plugin-react": "^4.5.2",
+    "autoprefixer": "^10.4.21",
+    "drizzle-kit": "^0.31.1",
+    "electron": "^35.4.0",
+    "electron-builder": "^25.1.8",
+    "eslint": "^9.27.0",
+    "eslint-plugin-react-hooks": "^5.2.0",
+    "eslint-plugin-react-refresh": "^0.4.20",
+    "postcss": "^8.5.3",
+    "prettier": "^3.5.3",
+    "tailwindcss": "^4.1.5",
+    "tsx": "^4.19.4",
+    "typescript": "^5.8.3",
+    "vite": "^6.3.5",
+    "vite-plugin-electron": "^0.28.8",
+    "vite-plugin-electron-renderer": "^0.14.6",
+    "vitest": "^3.1.3"
+  },
+  "build": {
+    "appId": "com.ai-chat-assistant",
+    "productName": "AI聊天助手",
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "dist/**/*",
+      "dist-electron/**/*"
+    ],
+    "win": {
+      "target": [
+        "nsis"
+      ],
+      "icon": "resources/icon.ico"
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": true,
+      "allowToChangeInstallationDirectory": true
+    }
+  }
+}
