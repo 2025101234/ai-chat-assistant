@@ -1,5 +1,13 @@
 # AI 聊天助手
 
+<p align="center">
+  <img src="resources/群二维码.jpg" alt="群二维码" width="200">
+</p>
+
+<p align="center">
+  <b>扫码加入交流群</b>
+</p>
+
 一款 Windows 电脑端 AI 聊天助手软件，能够接管微信/QQ 应用的聊天窗口，基于用户以往的聊天习惯自动生成回复内容。
 
 ## ✨ 功能特性
