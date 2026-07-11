@@ -22,7 +22,16 @@
 - 自定义 OpenAI 兼容接口
 
 ### 💬 消息平台接入
-- **微信 PC 端** - 通过 WeChatFerry 接入（开发中，等待支持微信4.x）
+
+#### 微信接入（支持多种方式）
+
+| 方式 | 稳定性 | 风险 | 费用 | 说明 |
+|------|--------|------|------|------|
+| **企业微信** | ⭐⭐⭐⭐⭐ | 低（官方支持） | 免费 | 推荐方案，安全合规 |
+| **WeChatFerry** | ⭐⭐⭐ | 中（有封号风险） | 免费 | 功能完整，需匹配微信版本 |
+| **Wechaty** | ⭐⭐⭐⭐ | 中 | 部分付费 | 多协议支持，社区活跃 |
+
+#### QQ 接入
 - **QQ PC 端** - 通过 NapCat 接入（基于 NTQQ 协议）
 
 ### 🎯 智能功能
@@ -50,7 +59,7 @@
 
 ```bash
 # 克隆仓库
-git clone https://github.com/your-username/ai-chat-assistant.git
+git clone https://github.com/2025101234/ai-chat-assistant.git
 cd ai-chat-assistant
 
 # 安装依赖
@@ -96,7 +105,79 @@ npx electron .
 | API端点 | https://token-plan-cn.xiaomimimo.com/v1/chat/completions |
 | 默认模型 | mimo-v2.5-pro |
 
-### 2. 配置 QQ（通过 NapCat）
+### 2. 配置微信
+
+在应用中点击"微信设置"，选择适合你的接入方式：
+
+#### 方式一：企业微信（推荐）
+
+**优点**：官方支持，安全合规，可与个人微信消息互通
+
+**配置步骤**：
+1. 注册 [企业微信](https://work.weixin.qq.com/)
+2. 登录 [企业微信管理后台](https://work.weixin.qq.com/wework_admin/frame)
+3. 创建"自建应用"，获取以下信息：
+   - **CorpID**：企业 ID
+   - **CorpSecret**：应用 Secret
+   - **AgentId**：应用 AgentId
+4. 配置应用的"接收消息"功能：
+   - 设置回调 URL（你的服务器地址）
+   - 设置 Token 和 EncodingAESKey
+5. 在应用中填入上述配置信息
+6. 点击"连接微信"
+
+**企业微信与个人微信互通**：
+- 在企业微信中添加"微信客服"功能
+- 个人微信用户可以通过客服入口与你的应用对话
+
+---
+
+#### 方式二：WeChatFerry
+
+**优点**：免费开源，功能完整
+
+**配置步骤**：
+1. 下载 [WeChatFerry](https://github.com/lich0821/WeChatFerry/releases)
+2. 确保微信版本为 **3.9.12.51**（[点击下载配套微信](https://github.com/lich0821/WeChatFerry/releases/download/v39.5.2/WeChatSetup-3.9.12.51.exe)）
+3. 启动 WeChatFerry 服务端
+4. 在应用中配置 WeChatFerry 地址和端口（默认 127.0.0.1:10086）
+5. 点击"连接微信"
+
+**注意事项**：
+- ⚠️ 使用 Hook 方式存在封号风险
+- 需要匹配特定微信版本
+- 微信更新可能导致失效
+
+---
+
+#### 方式三：Wechaty
+
+**优点**：多协议支持，社区活跃
+
+**配置步骤**：
+1. 选择 Puppet 类型：
+   - **wechaty-puppet-wechat4u**：免费，基于网页版（可能受限）
+   - **wechaty-puppet-padlocal**：iPad 协议，稳定（需要购买 Token）
+   - **wechaty-puppet-service**：云服务（需要购买 Token）
+2. 如果使用 Padlocal 或 Service，需要购买 Token：
+   - Padlocal: https://pad-local.com/
+   - Service: https://wechaty.js.org/docs/puppet-services/
+3. 在应用中选择 Puppet 类型并填入 Token
+4. 点击"连接微信"
+5. 首次连接需要扫码登录
+
+**安装依赖**：
+```bash
+# 安装 wechaty 和 puppet
+npm install wechaty wechaty-puppet-wechat4u
+
+# 或者使用 padlocal
+npm install wechaty wechaty-puppet-padlocal
+```
+
+---
+
+### 3. 配置 QQ（通过 NapCat）
 
 1. 下载 [NapCatQQ](https://github.com/NapNeko/NapCatQQ/releases)
 2. 运行 NapCatInstaller.exe 安装
@@ -104,15 +185,6 @@ npx electron .
 4. 在应用中点击"QQ设置"
 5. 填入 NapCat HTTP 端口（默认 3000）
 6. 点击"连接QQ"
-
-### 3. 配置微信（通过 WeChatFerry）
-
-> ⚠️ 微信接入功能开发中，等待 WeChatFerry 支持微信 4.x 版本
-
-1. 下载 [WeChatFerry](https://github.com/lich0821/WeChatFerry/releases)
-2. 安装配套微信版本
-3. 在应用中点击"微信设置"
-4. 点击"连接微信"
 
 ## 📁 项目结构
 
@@ -194,6 +266,14 @@ MIT License
 
 ## 🔗 相关链接
 
+### 微信接入相关
+- [企业微信开发文档](https://developer.work.weixin.qq.com/document/) - 企业微信官方 API
 - [WeChatFerry](https://github.com/lich0821/WeChatFerry) - 微信消息收发框架
+- [Wechaty](https://wechaty.js.org/) - 多协议聊天机器人 SDK
+- [Padlocal Token](https://pad-local.com/) - Wechaty iPad 协议 Token
+
+### QQ 接入相关
 - [NapCatQQ](https://github.com/NapNeko/NapCatQQ) - QQ Bot 框架
+
+### AI 模型相关
 - [MiMo API](https://mimo.mi.com/) - 小米 MiMo API 平台
