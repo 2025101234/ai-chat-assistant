@@ -15,6 +15,7 @@ import {
   SettingOutlined
 } from '@ant-design/icons'
 import { useNavigate } from 'react-router-dom'
+import { api } from '../../services/api'
 
 const Dashboard = () => {
   const navigate = useNavigate()
@@ -40,23 +41,23 @@ const Dashboard = () => {
 
   const loadData = async () => {
     try {
-      const modelsResult = await window.api.invoke('config:getModels')
+      const modelsResult = await api.config.getModels()
       setModels(modelsResult || [])
       
-      const messagesResult = await window.api.invoke('chat:getHistory', { contactId: 'test', limit: 10 })
+      const messagesResult = await api.chat.getHistory('test', 10)
       setRecentMessages(messagesResult || [])
-
-      // 加载微信状态
-      const wechatStatus = await window.api.invoke('wechat:getStatus')
-      setWechatConnected(wechatStatus.connected)
     } catch (error) {
       console.error('Load data failed:', error)
     }
   }
 
+  // Fix: 使用函数式更新确保获取最新状态
   const handleToggleMonitoring = () => {
-    setIsMonitoring(!isMonitoring)
-    message.success(isMonitoring ? '已停止监控' : '已开始监控')
+    setIsMonitoring(prev => {
+      const newValue = !prev
+      message.success(newValue ? '已开始监控' : '已停止监控')
+      return newValue
+    })
   }
 
   const handleConnectWeChat = async () => {
@@ -101,11 +102,7 @@ const Dashboard = () => {
     setTestResult('')
 
     try {
-      const result = await window.api.invoke('chat:generateReply', {
-        contactId: 'test',
-        message: testMessage
-      })
-
+      const result = await api.chat.generateReply('test', testMessage)
       setTestResult(result.content)
       message.success('AI回复成功')
     } catch (error: any) {
