@@ -144,8 +144,10 @@ export const useStatsStore = create<StatsState>((set) => ({
 
   incrementMessages: () => set((state) => ({ totalMessages: state.totalMessages + 1 })),
 
+  // Fix: 同时递增 totalMessages 以确保成功率计算正确
   incrementAiReplies: () => set((state) => ({
     aiReplies: state.aiReplies + 1,
+    totalMessages: state.totalMessages + 1,
     successRate: ((state.aiReplies + 1) / (state.totalMessages + 1)) * 100
   })),
 
