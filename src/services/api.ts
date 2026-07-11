@@ -1,5 +1,8 @@
 const { ipcRenderer } = window.electron
 
+// Fix: 使用递增计数器避免频道名冲突
+let streamChannelCounter = 0
+
 export const api = {
   getAppInfo: () => ipcRenderer.invoke('get-app-info'),
   
@@ -13,7 +16,8 @@ export const api = {
     chat: (provider: string, apiKey: string, endpoint: string, model: string, messages: any[]) =>
       ipcRenderer.invoke('model:chat', { provider, apiKey, endpoint, model, messages }),
     streamChat: (provider: string, apiKey: string, endpoint: string, model: string, messages: any[], callback: (chunk: string) => void) => {
-      const channel = 'model:stream-chat:' + Date.now()
+      // Fix: 使用计数器+时间戳确保频道名唯一
+      const channel = 'model:stream-chat:' + (++streamChannelCounter) + '-' + Date.now()
       ipcRenderer.on(channel, (_, data) => callback(data))
       ipcRenderer.invoke('model:stream-chat', { provider, apiKey, endpoint, model, messages, channel })
       return () => ipcRenderer.removeAllListeners(channel)
